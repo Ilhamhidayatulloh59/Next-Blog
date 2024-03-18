@@ -25,7 +25,10 @@ export async function generateMetadata({ params }: { params: { slug: string }}) 
     return {
         title: blog.fields.title,
         description: blog.fields.title,
-        authors: blog.fields.author.fields.name
+        authors: blog.fields.author.fields.name,
+        openGraph: {
+            images: [`https:${blog.fields.img.fields.file.url}`, `https:${blog.fields.author.fields.image.fields.file.url}`],
+        },
     }
 }
 
