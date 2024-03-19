@@ -1,3 +1,4 @@
+import CopyButton from "./copy";
 import FbButton from "./facebook";
 import LinkedInButton from "./linkedIn";
 import TwitterButton from "./twitter";
@@ -14,6 +15,7 @@ export default function ShareButton({ slug, className }: { slug: string, classNa
                 <WaButton slug={slug} url={base_url}/>
                 <FbButton slug={slug} url={base_url}/>
                 <LinkedInButton slug={slug} url={base_url}/>
+                <CopyButton slug={slug} url={base_url}/>
             </div>
         </div>
     )

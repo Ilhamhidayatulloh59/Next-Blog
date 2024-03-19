@@ -9,7 +9,7 @@ export default async function Home() {
 
   return (
     <Wrapper>
-      <div className="flex gap-2 flex-wrap">
+      <div className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-2">
         {
           blogs.map((items: IBlogs) => {
             return (
