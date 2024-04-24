@@ -3,49 +3,36 @@ import Wrapper from "@/components/wrapper"
 import { formatDate } from "@/helper/formatDate";
 import { getBlogSlug, getBlogs } from "@/lib/blog"
 import { IBlogs } from "@/type/blog"
-import { Options, documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { BLOCKS } from '@contentful/rich-text-types';
 import Link from "next/link";
 
 export const revalidate = 3600
 
 export const generateStaticParams = async () => {
-    const users = await getBlogs()
+    const data = await getBlogs()
 
-    return users.map((blog: IBlogs) => ({
+    return data.blogs.map((blog: IBlogs) => ({
         params: {
-            slug: blog.fields.slug
+            slug: blog.slug
         }
     }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string }}) {
-    const blog = await getBlogSlug(params.slug)
+    const data = await getBlogSlug(params.slug)
 
     return {
-        title: blog.fields.title,
-        description: blog.fields.title,
-        authors: blog.fields.author.fields.name,
+        title: data.blogs.title,
+        description: data.blogs.title,
+        authors: data.blogs.author.name,
         openGraph: {
-            images: [`https:${blog.fields.img.fields.file.url}`, `https:${blog.fields.author.fields.image.fields.file.url}`],
+            images: [data.blogs.image],
         },
     }
 }
 
 export default async function BlogDetail({ params }: { params: { slug: string }}) {
-    const blog = await getBlogSlug(params.slug)
+    const data = await getBlogSlug(params.slug)
     
-    
-    const options: Options = {
-        renderNode: {
-            [BLOCKS.HEADING_1]: (node, children) => <h1 className="my-[2.5px] md:text-3xl sm:text-2xl text-xl">{children}</h1>,
-            [BLOCKS.HEADING_2]: (node, children) => <h2 className="my-[2.5px] md:text-2xl sm:text-xl text-lg">{children}</h2>,
-            [BLOCKS.HEADING_3]: (node, children) => <h3 className="my-5 md:text-xl sm:text-lg text-base">{children}</h3>,
-            [BLOCKS.HEADING_4]: (node, children) => <h4 className="my-5 md:text-lg sm:text-base text-sm">{children}</h4>,
-            [BLOCKS.HEADING_5]: (node, children) => <h5 className="my-10 md:text-base sm:text-sm text-xs">{children}</h5>,
-            [BLOCKS.HEADING_6]: (node, children) => <h6 className="my-10 mb-20 md:text-base sm:text-sm text-xs">{children}</h6>,
-          },
-    };
     return (
         <Wrapper>
             <div className="flex">
@@ -56,18 +43,18 @@ export default async function BlogDetail({ params }: { params: { slug: string }}
                         </svg>
                         back
                     </Link>
-                    <ShareButton slug={blog.fields.slug} className="mt-5"/>
+                    <ShareButton slug={data.blogs.slug} className="mt-5"/>
                 </div>
                 <div className="flex-[2] pr-52 max-lg:pr-0">
-                    <h5 className="mb-2 text-[32px] max-md:text-[24px] font-bold tracking-tight text-gray-900 dark:text-white">{blog.fields.title}</h5>
+                    <h5 className="mb-2 text-[32px] max-md:text-[24px] font-bold tracking-tight text-gray-900 dark:text-white">{data.blogs.title}</h5>
                     <div className="flex gap-1">
-                        <p className="font-bold text-[18px] max-md:text-[14px]">{blog.fields.author.fields.name}</p>
+                        <p className="font-bold text-[18px] max-md:text-[14px]">{data.blogs.author.name}</p>
                         ∙
-                        <p className="text-[18px] max-md:text-[14px]">{formatDate(blog.fields.date)}</p>
+                        <p className="text-[18px] max-md:text-[14px]">{formatDate(data.blogs.date)}</p>
                     </div>
-                    <ShareButton slug={blog.fields.slug} className="hidden max-md:block" />
-                    <img className="h-[350px] max-sm:h-[200px] max-md:h-[300px] w-full my-5 shadow" src={`https:${blog.fields.img.fields.file.url}`} alt={blog.fields.title} />
-                    {documentToReactComponents(blog.fields.content, options)}
+                    <ShareButton slug={data.blogs.slug} className="hidden max-md:block" />
+                    <img className="h-[350px] max-sm:h-[200px] max-md:h-[300px] w-full my-5 shadow" src={data.blogs.image} alt={data.blogs.title} />
+                    <p>{data.blogs.content}</p>
                 </div>
             </div>
         </Wrapper>

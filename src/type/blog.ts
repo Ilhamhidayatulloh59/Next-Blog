@@ -1,23 +1,12 @@
-export interface IBlogs { 
-    sys: { id:  number | null | undefined; }; 
-    fields: { 
-        title: string;  
-        slug: string;
-        img: { fields: 
-            { file: 
-                { url: string; }; 
-            }; 
-        }; 
-        author: { 
-            fields: { 
-                image: { 
-                    fields: { 
-                        file: { url: string; }; 
-                    }; 
-                }; 
-                name: string; 
-                email: string; 
-            }; 
-        };
-    }
-}
+export interface IBlogs {
+    id: number;
+    title: string;
+    slug: string;
+    image: string
+    author: {
+        id: number;
+        image: string;
+        name: string;
+        email: string;
+    };
+};

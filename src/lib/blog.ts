@@ -1,46 +1,15 @@
-const base_url = process.env.BASE_URL_CONTENTFUL
-const space_id = process.env.SPACE_ID_CONTENTFUL
-const token = process.env.TOKEN_CONTENTFUL
-import resolveResponse from 'contentful-resolve-response'
+const base_url = process.env.BASE_URL
 
 export const getBlogs = async () => {
-    const res = await fetch(`${base_url}/spaces/${space_id}/environments/master/entries?access_token=${token}&content_type=blog&include=10`, { next: {  revalidate: 10 } })
+    const res = await fetch(`${base_url}/blogs`, { next: {  revalidate: 10 } })
     const data = await res.json()
 
-    const response = {
-        items: data.items,
-        includes: data.includes
-    };
-      
-    const items = resolveResponse(response)
-
-    return items
+    return data
 }
 
 export const getBlogSlug = async (slug: string) => {
-    const res = await fetch(`${base_url}/spaces/${space_id}/environments/master/entries?access_token=${token}&content_type=blog&include=10&fields.slug=${slug}`, { next: {  revalidate: 3600 } })
+    const res = await fetch(`${base_url}/blogs/${slug}`, { next: {  revalidate: 3600 } })
     const data = await res.json()
 
-    const response = {
-        items: data.items,
-        includes: data.includes
-    };
-      
-    const items = resolveResponse(response)
-
-    return items[0]
-}
-
-export const getBlogNeSlug = async (slug: string) => {
-    const res = await fetch(`${base_url}/spaces/${space_id}/environments/master/entries?access_token=${token}&content_type=blog&include=10&fields.slug[ne]=${slug}&limit=3`, { next: {  revalidate: 3600 } })
-    const data = await res.json()
-
-    const response = {
-        items: data.items,
-        includes: data.includes
-    };
-      
-    const items = resolveResponse(response)
-
-    return items
+    return data
 }
