@@ -50,7 +50,7 @@ export const Navbar = () => {
                             </div>
                         }
                         { author == null && 
-                            <div className="flex gap-5">
+                            <div className="flex gap-2">
                                 <Link href={'/register'}>
                                     <button className="p-1.5 bg-orange-400 rounded-md">Register</button>
                                 </Link>
