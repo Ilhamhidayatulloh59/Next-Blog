@@ -6,6 +6,7 @@ import { getAuthor } from "@/lib/author"
 import { useEffect } from "react"
 import { setUser } from "@/lib/features/author/authorSlice"
 import { useRouter } from "next/navigation"
+import { deleteToken } from "@/app/action"
 
 export const Navbar = () => {
     const author = useAppSelector((state) => state.author.value)
@@ -15,6 +16,7 @@ export const Navbar = () => {
     const onLogout = () => {
         dispatch(setUser(null))
         window.localStorage.removeItem('token')
+        deleteToken('token')
         router.push('/')
     }
     

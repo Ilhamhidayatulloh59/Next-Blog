@@ -5,6 +5,7 @@ import { setUser } from "@/lib/features/author/authorSlice";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import * as yup from 'yup'
+import { createToken } from "@/app/action";
 
 const LoginSchema = yup.object().shape({
     email: yup.string().email("invalid email").required("email required"),
@@ -20,6 +21,7 @@ export default function LoginForm() {
         try {
           const res = await loginAuthor(data)
           localStorage.setItem('token', res.token)
+          createToken(res.token)
           dispatch(setUser(res.author))
           router.push('/')
         } catch (err) {
