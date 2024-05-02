@@ -32,7 +32,6 @@ export const getAuthor = async (token: any) => {
             },
         })
         const result = await res.json()
-        console.log(result);
         
         return result
     } else {
