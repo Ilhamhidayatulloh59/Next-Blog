@@ -3,7 +3,7 @@ import { loginAuthor } from "@/lib/author";
 import { useAppDispatch } from "@/lib/features/hooks";
 import { setUser } from "@/lib/features/author/authorSlice";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import * as yup from 'yup'
 import { createToken } from "@/app/action";
 
@@ -15,14 +15,15 @@ const LoginSchema = yup.object().shape({
   });
 
 export default function LoginForm() {
-    const router = useRouter()
+    const search = useSearchParams()
+    const redirect = search.get('redirect') || '/'
     const dispatch = useAppDispatch()
+    
     const onLogin = async (data: any) => {
         try {
           const res = await loginAuthor(data)
-          createToken(res.token)
           dispatch(setUser(res.author))
-          router.push('/')
+          createToken(res.token, redirect)
         } catch (err) {
           console.log(err);
         }

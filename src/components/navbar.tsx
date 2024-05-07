@@ -5,20 +5,22 @@ import { useAppDispatch, useAppSelector } from "@/lib/features/hooks"
 import { getAuthor } from "@/lib/author"
 import { useEffect } from "react"
 import { setUser } from "@/lib/features/author/authorSlice"
-import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { deleteToken } from "@/app/action"
 import Cookies from 'js-cookie'
 
 export const Navbar = () => {
     const author = useAppSelector((state) => state.author.value)
     const dispatch = useAppDispatch()
-    const router = useRouter()
+    const token = Cookies.get("token")
+    const path = usePathname()
+    const pageUrl = ['/login', '/register']
+    const url = pageUrl.includes(path) ? '/' : path
 
     const onLogout = () => {
         dispatch(setUser(null))
         deleteToken('token')
         Cookies.remove('token')
-        router.push('/')
     }
     
     const keepLogin = async (token: any) => {
@@ -31,7 +33,6 @@ export const Navbar = () => {
     }
 
     useEffect(() => {
-        const token = Cookies.get("token")
         keepLogin(token)
     }, [])
 
@@ -57,7 +58,7 @@ export const Navbar = () => {
                                 <Link href={'/register'}>
                                     <button className="p-1.5 bg-orange-400 rounded-md">Register</button>
                                 </Link>
-                                <Link href={'/login'}>
+                                <Link href={`/login?redirect=${url}`}>
                                     <button className="p-1.5 rounded-md border-2 border-orange-400">Login</button>
                                 </Link>
                             </div>
