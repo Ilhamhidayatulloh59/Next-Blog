@@ -20,7 +20,6 @@ export default function LoginForm() {
     const onLogin = async (data: any) => {
         try {
           const res = await loginAuthor(data)
-          localStorage.setItem('token', res.token)
           createToken(res.token)
           dispatch(setUser(res.author))
           router.push('/')

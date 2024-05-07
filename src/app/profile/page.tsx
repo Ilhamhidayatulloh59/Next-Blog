@@ -1,6 +1,7 @@
 "use client"
 import Wrapper from "@/components/wrapper";
 import { useRef, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function ProfilePage() {
     const imageRef = useRef<HTMLInputElement>(null)
@@ -15,8 +16,7 @@ export default function ProfilePage() {
 
     const handleUpload = async () => {
         try {
-            // console.log(image);
-            const token = localStorage.getItem('token')
+            const token = Cookies.get("token")
             const formData = new FormData()
             if (image) {
                 formData.append("file", image)

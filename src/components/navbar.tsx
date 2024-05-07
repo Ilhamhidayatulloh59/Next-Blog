@@ -7,6 +7,7 @@ import { useEffect } from "react"
 import { setUser } from "@/lib/features/author/authorSlice"
 import { useRouter } from "next/navigation"
 import { deleteToken } from "@/app/action"
+import Cookies from 'js-cookie'
 
 export const Navbar = () => {
     const author = useAppSelector((state) => state.author.value)
@@ -15,8 +16,8 @@ export const Navbar = () => {
 
     const onLogout = () => {
         dispatch(setUser(null))
-        window.localStorage.removeItem('token')
         deleteToken('token')
+        Cookies.remove('token')
         router.push('/')
     }
     
@@ -30,7 +31,7 @@ export const Navbar = () => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
+        const token = Cookies.get("token")
         keepLogin(token)
     }, [])
 
